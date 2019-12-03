@@ -21,6 +21,7 @@ public:
         auto self(shared_from_this());
         asio::async_write(_oppo, asio::buffer(_sockbuf, recv_n),
             [this, self](const asio::error_code &ec, std::size_t recv_n) {
+                if(ec) return;
                 recv_sock();
         });
     }
@@ -29,22 +30,25 @@ public:
         auto self(shared_from_this());
         asio::async_write(_sock, asio::buffer(_oppobuf, recv_n), 
             [this, self](const asio::error_code &ec, std::size_t recv_n) {
+                if(ec) return;
                 recv_oppo();
         });
     }
     void recv_oppo()
     {
         auto self(shared_from_this());
-        _oppo.async_read_some(asio::buffer(_oppobuf, 1024),
+        _oppo.async_read_some(asio::buffer(_oppobuf, MAX_LEN),
             [this, self](const asio::error_code &ec, std::size_t recv_n) {
+                if(ec) return;
                 send_sock(recv_n);
         });
     };
     void recv_sock()
     {
         auto self(shared_from_this());
-        _sock.async_read_some(asio::buffer(_sockbuf, 1024),
+        _sock.async_read_some(asio::buffer(_sockbuf, MAX_LEN),
             [this, self](const asio::error_code &ec, std::size_t recv_n) {
+                if(ec) return;
                 send_oppo(recv_n);
         });
     };
@@ -53,19 +57,15 @@ public:
         auto self(shared_from_this());
         _oppo.async_connect(remote,
             [this, self](const asio::error_code &ec) {
-                if (!ec)
-                {
-                    asio::ip::tcp::no_delay option(true);
-                    _sock.set_option(option);
-                    _oppo.set_option(option);
-                    translate();
-                }
+                if(ec) return;
+                asio::ip::tcp::no_delay option(true);
+                translate();
         });
     }
 
 private:
     asio::ip::tcp::socket _sock; //source
     asio::ip::tcp::socket _oppo;
-    char _sockbuf[1024];
-    char _oppobuf[1024];
+    char _sockbuf[MAX_LEN];
+    char _oppobuf[MAX_LEN];
 };
