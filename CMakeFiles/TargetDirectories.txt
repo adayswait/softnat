@@ -1,0 +1,3 @@
+/opt/jesse/git/softnat/CMakeFiles/rebuild_cache.dir
+/opt/jesse/git/softnat/CMakeFiles/softnat.dir
+/opt/jesse/git/softnat/CMakeFiles/edit_cache.dir
