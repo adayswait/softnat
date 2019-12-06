@@ -4,7 +4,7 @@
 cmake_minimum_required (VERSION 3.8)
 include_directories(asio/include)
 if(CMAKE_COMPILER_IS_GNUCXX)
-    SET (CMAKE_CXX_FLAGS "-std=c++1y -g -pthread -DASIO_STANDALONE")
+    SET (CMAKE_CXX_FLAGS "-std=c++11 -g -pthread -DASIO_STANDALONE")
 else(CMAKE_COMPILER_IS_GNUCXX)
 	SET (CMAKE_CXX_FLAGS "-DASIO_STANDALONE -D_WIN32_WINNT=0x0501 /EHsc")
 endif(CMAKE_COMPILER_IS_GNUCXX)
