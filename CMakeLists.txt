@@ -10,6 +10,6 @@ else(CMAKE_COMPILER_IS_GNUCXX)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 # 将源代码添加到此项目的可执行文件。
-add_executable (softnat "softnat.cc" "softnat.h")
+add_executable (softnat "main.cc" "softnat.cc" "softnat.h")
 
 # TODO: 如有需要，请添加测试并安装目标。
