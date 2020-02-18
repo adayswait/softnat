@@ -44,6 +44,7 @@ private:
     void send2act(std::size_t n);
     void recv4psv();
     void recv4act();
+    void close();
     char _act_buf[MAX_LEN];
     char _psv_buf[MAX_LEN];
 };

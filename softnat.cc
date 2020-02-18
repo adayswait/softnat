@@ -46,7 +46,10 @@ void twine::send2psv(std::size_t n) {
     auto self(shared_from_this());
     asio::async_write(_psv, asio::buffer(_act_buf, n),
         [this, self](const asio::error_code &ec, std::size_t n) {
-            if (ec) return;
+            if (ec) {
+                close();
+                return;
+            }
             recv4act();
     });
 }
@@ -54,7 +57,10 @@ void twine::send2act(std::size_t n) {
     auto self(shared_from_this());
     asio::async_write(_act, asio::buffer(_psv_buf, n),
         [this, self](const asio::error_code &ec, std::size_t n) {
-            if (ec) return;
+            if (ec) {
+                close();
+                return;
+            }
             recv4psv();
     });
 }
@@ -62,7 +68,10 @@ void twine::recv4psv() {
     auto self(shared_from_this());
     _psv.async_read_some(asio::buffer(_psv_buf, MAX_LEN),
         [this, self](const asio::error_code &ec, std::size_t n) {
-            if (ec) return;
+            if (ec) {
+                close();
+                return;
+            }
             send2act(n);
     });
 }
@@ -70,9 +79,17 @@ void twine::recv4act() {
     auto self(shared_from_this());
     _act.async_read_some(asio::buffer(_act_buf, MAX_LEN),
         [this, self](const asio::error_code &ec, std::size_t n) {
-            if (ec) return;
+            if (ec) {
+                close();
+                return;
+            }
             send2psv(n);
     });
+}
+
+void twine::close() {
+    _act.close();
+    _psv.close();
 }
 
 void l2c::estab() {

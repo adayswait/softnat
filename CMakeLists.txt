@@ -2,6 +2,7 @@
 # 项目特定的逻辑。
 #
 cmake_minimum_required (VERSION 3.8)
+project(softnat)
 include_directories(asio/include)
 if(CMAKE_COMPILER_IS_GNUCXX)
     SET (CMAKE_CXX_FLAGS "-std=c++11 -pthread -g")
